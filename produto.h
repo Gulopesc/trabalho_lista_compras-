@@ -3,7 +3,7 @@
 
 using namespace std;
 
-//criando a classe de produto
+//criando o struct do produto
 struct item {
     string codProduto;
     int quantidade;
@@ -11,7 +11,7 @@ struct item {
     double valor;
 };
 
-//criando a classe de lista de compras, ainda faltam adicionar todas as funções que serão utilizadas para manipular a lista de compras
+//Criando a classe da lista de compras, com as funções que o trabalho pede
 class ListaCompras {
 private:
     item produtos[100];
@@ -21,10 +21,13 @@ public:
     //construtor da classe, inicializando a quantidade atual de produtos como 0
     ListaCompras() : ultimo(0) {}
 
+    //verifica se a lista tá vazia (se o indice do ultimo item for zero igual o primeiro)
     bool listaVazia(){
         return ultimo==primeiro;
     }
 
+    //verifica se há um produto com determinado codigo, percorrendo todos os produtos procurando um com o mesmo codigo
+    //retorna true se encontrar, false caso contrario
     bool confereRepetido(string codigo){
         for (int i = 0; i < ultimo; i++){
             if (produtos[i].codProduto == codigo){
@@ -34,10 +37,12 @@ public:
         return false;
     }
 
+    //verifica se a lista tá cheia (se já tem 100 itens) e retorna true se estiver
     bool listaCheia(){
         return ultimo == 100;
     }
 
+    //cadastra um novo produto no final da lista (só se ela não estiver cheia e o codigo não for repetido)
     void cadastraProduto(item novoItem){
         if (listaCheia()){
             cout << "Lista cheia, remova algum produto antes de cadastrar outro." << endl;
@@ -50,6 +55,8 @@ public:
         cout << "Produto cadastrado com sucesso!" << endl;
         return;
     }
+
+    //remove um item de uma posição i, usada nas funções de remover por codigo e remover do fim
     void removeItem(int i){
         if (listaVazia()){
             cout << "Lista vazia, nao ha produtos para remover." << endl;
@@ -62,6 +69,7 @@ public:
         cout << "Elemento removido da posicao " << i << endl;
     }
 
+    //remove um item de acordo com o codigo dele, se não achar com o codigo não faz nada
     void removePorCodigo (string codigo){
         if (listaVazia()){
             cout << "Lista vazia, nao ha produtos para remover." << endl;
@@ -77,8 +85,9 @@ public:
         return;
     }
 
+    //imprime as informações de um produto de acordo com o codigo dele, se não achar com o codigo não faz nada
     void imprimePorCodigo (string codigo){
-        if (listaVazia){
+        if (listaVazia()){
             cout << "Lista vazia, nao ha produtos para procurar." << endl;
             return;
         }
@@ -92,6 +101,40 @@ public:
             }
         }
         cout << "Produto nao encontrado. " << endl;
+        return;
+    }
+
+    //imprime todos os itens da lista se ela não estiver vazia
+    void imprimeLista(){
+        if (listaVazia()){
+            cout << "Lista vazia, nao ha produtos para imprimir" << endl;
+            return;
+        }
+        for(int i = 0; i < ultimo; i++){
+            cout << i+1 << "º produto da lista: " << endl;
+            cout << "Produto: " << produtos[i].nome << endl;
+            cout << "Codigo: " << produtos[i].codProduto << endl;
+            cout << "Quantidade: " << produtos[i].quantidade << endl;
+            cout << "Valor: " << produtos[i].valor << endl << endl;
+            return;
+        }
+    }
+    //calcula o total da lista, percorrendo item por item até o ultimo e multiplicando a quantidade pelo valor unitario
+    //tudo só executa se a lista não estiver vazia
+    void calculaTotal(){
+        if (listaVazia()){
+            cout << "Lista vazia, nao ha produtos para remover." << endl;
+            return;
+        }
+
+        double total = 0;
+        float valor;
+        for(int i = 0; i < ultimo; i++){
+            valor = produtos[i].valor * produtos[i].quantidade;
+            total += valor;
+        }
+
+        cout << "O valor total da lista e de: R$" << total << endl;
         return;
     }
 
