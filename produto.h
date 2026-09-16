@@ -31,4 +31,5 @@ public:
     void imprimePorCodigo (string codigo);
     void imprimeLista();
     void calculaTotal();
+    void removeUltimo();
 };

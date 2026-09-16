@@ -3,20 +3,20 @@
 
 int main(){
     ListaCompras listaCompras;
-    int resposta = 0;
+    int resposta = 200;
 
-    while(resposta != -1){ 
+    do {
         cout << "1 - Adicionar item na lista" << endl;
         cout << "2 - Remover item da lista" << endl;
         cout << "3 - Consultar itens da lista" << endl;
-        cout << "4 - "Calcular valor total da lista" <<endl;
-        cout << "0 - "Finalizar programa" << endl;
+        cout << "4 - Calcular valor total da lista" <<endl;
+        cout << "0 - Finalizar programa" << endl;
         cout << "Digite a opcao correspontente ao comando que deseja executar: " << endl;
         
         cin >> resposta;
 
         switch(resposta){
-            case 1:
+            case 1:{
                 if (listaCompras.listaCheia()){
                     cout << "Lista cheia, remova algum produto antes de cadastrar outro." << endl;
                     break;
@@ -24,10 +24,10 @@ int main(){
                 item novoItem;
                 do{
                     cout << "Digite o codigo do produto: ";
-                    cin >> novoItem.codigo;
-                    if (listaCompras.confereRepetido(novoItem.codigo))
+                    cin >> novoItem.codProduto;
+                    if (listaCompras.confereRepetido(novoItem.codProduto))
                         cout << "Ja ha um produto com esse codigo, digite outro." << endl;
-                }while (listaCompras.confereRepetido(novoItem.codigo));
+                }while (listaCompras.confereRepetido(novoItem.codProduto));
 
                 cout << "Digite o nome do produto: ";
                 cin >> novoItem.nome;
@@ -37,21 +37,64 @@ int main(){
                 cin >> novoItem.valor;
 
                 listaCompras.cadastraProduto(novoItem);
+                break;
             }
-            case 2: 
+            case 2:{ 
                 char alternativa = 'z';
                 do{
                     cout << "Digite \"a\" para remover o ultimo item da lista ou \"b\" para remover um item qualquer pelo codigo: ";
                     cin >> alternativa;
-                    if (alternativa != 'a' || alternativa != 'b')
+                    if (alternativa != 'a' && alternativa != 'b')
                         cout << "Resposta invalida.";
-                }while (alternativa != 'a' || alternativa != 'b');
+                }while (alternativa != 'a' && alternativa != 'b');
 
                 if (alternativa == 'a'){
-                    listaCompras.removeItem (listaTeste.getUltimo);
+                    listaCompras.removeUltimo();
                 }
-                if (alternativa == 'b')
+                if (alternativa == 'b'){
+                    string codigoRemover;
+                    cout << "Digite o codigo do produto que deseja remover: ";
+                    cin >> codigoRemover;
+                    listaCompras.removePorCodigo(codigoRemover);
+                }
+                break;
+            }
+            case 3:{ 
+                char alternativa = 'z';
+                do{
+                    cout << "Digite \"a\" para consultar toda a lista ou \"b\" para consultar um item especifico: ";
+                    cin >> alternativa;
+                    if (alternativa != 'a' && alternativa != 'b')
+                        cout << "Resposta invalida.";
+                }while (alternativa != 'a' && alternativa != 'b');
 
+                if (alternativa == 'a'){
+                    listaCompras.imprimeLista();
+                }
+                if (alternativa == 'b'){
+                    string codigoImprimir;
+                    cout << "Digite o codigo do produto que deseja visualizar: ";
+                    cin >> codigoImprimir;
+                    listaCompras.imprimePorCodigo(codigoImprimir);
+                }
+                break;
+            }
+                    
+            case 4:{
+                listaCompras.calculaTotal();
+                break;
+            }
+            case 0:{
+                cout << "Programa finalizado." << endl;
+                break;  
+            }
+            default:{
+                cout << "Opcao nao reconhecida. " << endl;
+                break;
+            }
         }
+
+        cout << endl;
+    } while (resposta != 0);
     return 0;
 }
