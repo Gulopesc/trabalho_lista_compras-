@@ -99,7 +99,7 @@ void ListaCompras::imprimeLista(){
             return;
         }
         for(int i = 0; i < ultimo; i++){
-            cout << "Produto " << i+1 << "da lista: " << endl;
+            cout << "Produto " << i+1 << " da lista: " << endl;
             cout << "Nome: " << produtos[i].nome << endl;
             cout << "Codigo: " << produtos[i].codProduto << endl;
             cout << "Quantidade: " << produtos[i].quantidade << endl;
