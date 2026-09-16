@@ -33,7 +33,8 @@ int main(){
                 }while (listaCompras.confereRepetido(novoItem.codProduto));
 
                 cout << "Digite o nome do produto: ";
-                cin >> novoItem.nome;
+                cin >> ws;
+                getline(cin, novoItem.nome);
                 cout << "Digite a quantidade a ser comprada: ";
                 cin >> novoItem.quantidade;
                 cout << "Digite o valor unitario do produto: ";
