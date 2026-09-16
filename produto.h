@@ -1,34 +1,37 @@
+#ifndef PRODUTO_H
+#define PRODUTO_H
+
 #include <iostream>
 #include <string>
 
 using namespace std;
 
-//criando o struct do produto
 struct item {
     string codProduto;
     int quantidade;
     string nome;
     double valor;
+    item* proximo;
 };
 
-//Criando a classe da lista de compras, com as funções que o trabalho pede
 class ListaCompras {
 private:
-    item produtos[100];
-    int primeiro = 0;
-    int ultimo = primeiro;
+    item* primeiro;
+    item* ultimo;
+    int tam;
+
 public:
-
     ListaCompras();
+    ~ListaCompras();
 
-    bool listaVazia();
-    bool confereRepetido(string codigo);
-    bool listaCheia();
-
-    void cadastraProduto(item novoItem);
-    void removeItem(int i);
-    void removePorCodigo (string codigo);
-    void imprimePorCodigo (string codigo);
-    void imprimeLista();
-    void calculaTotal();
+    bool listaVazia() const;
+    bool confereRepetido(string codigo) const;
+    void cadastraProduto(const item& novoItem);
+    void removeUltimo();
+    void removePorCodigo(string codigo);
+    void imprimePorCodigo(string codigo) const;
+    void imprimeLista() const;
+    double calculaTotal() const;
 };
+
+#endif

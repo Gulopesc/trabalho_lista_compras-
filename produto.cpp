@@ -1,124 +1,150 @@
 #include "produto.h"
 
-//construtor da classe, inicializando a quantidade atual de produtos como 0
-ListaCompras::ListaCompras() : ultimo(0) {}
+ListaCompras::ListaCompras() : primeiro(nullptr), ultimo(nullptr), tam(0) {}
 
-//verifica se a lista tá vazia (se o indice do ultimo item for zero igual o primeiro)
-bool ListaCompras::listaVazia(){
-        return ultimo==primeiro;
+ListaCompras::~ListaCompras() {
+    while (!listaVazia()) {
+        removeUltimo();
     }
+}
 
-//verifica se há um produto com determinado codigo, percorrendo todos os produtos procurando um com o mesmo codigo
-//retorna true se encontrar, false caso contrario
-bool ListaCompras::confereRepetido(string codigo) {
-    for (int i = 0; i < ultimo; i++) {
-        if (produtos[i].codProduto == codigo) {
+bool ListaCompras::listaVazia() const {
+    return primeiro == nullptr;
+}
+
+bool ListaCompras::confereRepetido(string codigo) const {
+    for (item* atual = primeiro; atual != nullptr; atual = atual->proximo) {
+        if (atual->codProduto == codigo) {
             return true;
         }
     }
     return false;
 }
 
-//verifica se a lista tá cheia (se já tem 100 itens) e retorna true se estiver
-bool ListaCompras::listaCheia(){
-    return ultimo == 100;
+void ListaCompras::cadastraProduto(const item& novoItem) {
+    item* novoPtr = new item;
+    *novoPtr = novoItem;
+    novoPtr->proximo = nullptr;
+
+    if (listaVazia()) {
+        primeiro = novoPtr;
+        ultimo = novoPtr;
+    } else {
+        ultimo->proximo = novoPtr;
+        ultimo = novoPtr;
+    }
+
+    tam++;
+    cout << "Produto cadastrado com sucesso!" << endl;
 }
 
-//cadastra um novo produto no final da lista (só se ela não estiver cheia e o codigo não for repetido)
-void ListaCompras::cadastraProduto(item novoItem){
-        if (listaCheia()){
-            cout << "Lista cheia, remova algum produto antes de cadastrar outro." << endl;
-            return;
-        }
-        if (confereRepetido(novoItem.codProduto)){
-            cout << "Ja existe um produto com esse codigo" << endl; 
-            return;
-        }
-        produtos[ultimo] = novoItem;
-        ultimo++;
-
-        cout << "Produto cadastrado com sucesso!" << endl;
+void ListaCompras::removeUltimo() {
+    if (listaVazia()) {
+        cout << "Lista vazia, nao ha produtos para remover." << endl;
         return;
     }
 
- //remove um item de uma posição i, usada nas funções de remover por codigo e remover do fim
-void ListaCompras::removeItem(int i){
-    if (listaVazia()){
-            cout << "Lista vazia, nao ha produtos para remover." << endl;
-            return;
-        }
-        for (i; i < ultimo - 1; i++){
-            produtos[i] = produtos[i+1];
-        }
-        i--;
-        cout << "Elemento removido da posicao " << i << endl;
-    }
-
-//remove um item de acordo com o codigo dele, se não achar com o codigo não faz nada
-void ListaCompras::removePorCodigo (string codigo){
-        if (listaVazia()){
-            cout << "Lista vazia, nao ha produtos para remover." << endl;
-            return;
-        }
-        for (int i = 0; i < ultimo; i++){
-            if (produtos[i].codProduto == codigo){
-                removeItem(i);
-                return;
-            }
-        }
-        cout << "Produto nao encontrado. " << endl;
+    if (primeiro == ultimo) {
+        delete primeiro;
+        primeiro = nullptr;
+        ultimo = nullptr;
+        tam = 0;
+        cout << "Ultimo item removido." << endl;
         return;
     }
 
-//imprime as informações de um produto de acordo com o codigo dele, se não achar com o codigo não faz nada
-void ListaCompras::imprimePorCodigo (string codigo){
-        if (listaVazia()){
-            cout << "Lista vazia, nao ha produtos para procurar." << endl;
-            return;
-        }
-        for (int i = 0; i < ultimo; i++){
-            if (produtos[i].codProduto == codigo){
-                cout << "Produto: " << produtos[i].nome << endl;
-                cout << "Codigo: " << produtos[i].codProduto << endl;
-                cout << "Quantidade: " << produtos[i].quantidade << endl;
-                cout << "Valor: " << produtos[i].valor << endl;
-                return;
-            }
-        }
-        cout << "Produto nao encontrado. " << endl;
+    item* atual = primeiro;
+    while (atual->proximo != ultimo) {
+        atual = atual->proximo;
+    }
+
+    delete ultimo;
+    ultimo = atual;
+    ultimo->proximo = nullptr;
+    tam--;
+    cout << "Ultimo item removido." << endl;
+}
+
+void ListaCompras::removePorCodigo(string codigo) {
+    if (listaVazia()) {
+        cout << "Lista vazia, nao ha produtos para remover." << endl;
         return;
     }
 
-//imprime todos os itens da lista se ela não estiver vazia
-void ListaCompras::imprimeLista(){
-        if (listaVazia()){
-            cout << "Lista vazia, nao ha produtos para imprimir" << endl;
-            return;
-        }
-        for(int i = 0; i < ultimo; i++){
-            cout << i+1 << " produto da lista: " << endl;
-            cout << "Produto: " << produtos[i].nome << endl;
-            cout << "Codigo: " << produtos[i].codProduto << endl;
-            cout << "Quantidade: " << produtos[i].quantidade << endl;
-            cout << "Valor: " << produtos[i].valor << endl << endl;
-        }
+    item* anterior = nullptr;
+    item* atual = primeiro;
+
+    while (atual != nullptr && atual->codProduto != codigo) {
+        anterior = atual;
+        atual = atual->proximo;
     }
 
-//calcula o total da lista, percorrendo item por item até o ultimo e multiplicando a quantidade pelo valor unitario
-//tudo só executa se a lista não estiver vazia
-void ListaCompras::calculaTotal(){
-        if (listaVazia()){
-            cout << "Lista vazia, nao ha produtos para calcular." << endl;
-            return;
-        }
-
-        double total = 0;
-        float valor;
-        for(int i = 0; i < ultimo; i++){
-            valor = produtos[i].valor * produtos[i].quantidade;
-            total += valor;
-        }
-
-        cout << "O valor total da lista e de: R$" << total << endl;
+    if (atual == nullptr) {
+        cout << "Produto nao encontrado." << endl;
         return;
     }
+
+    if (anterior == nullptr) {
+        primeiro = atual->proximo;
+    } else {
+        anterior->proximo = atual->proximo;
+    }
+
+    if (atual == ultimo) {
+        ultimo = anterior;
+    }
+
+    delete atual;
+    tam--;
+    cout << "Produto removido com sucesso." << endl;
+}
+
+void ListaCompras::imprimePorCodigo(string codigo) const {
+    if (listaVazia()) {
+        cout << "Lista vazia, nao ha produtos para procurar." << endl;
+        return;
+    }
+
+    for (item* atual = primeiro; atual != nullptr; atual = atual->proximo) {
+        if (atual->codProduto == codigo) {
+            cout << "Produto: " << atual->nome << endl;
+            cout << "Codigo: " << atual->codProduto << endl;
+            cout << "Quantidade: " << atual->quantidade << endl;
+            cout << "Valor: " << atual->valor << endl;
+            return;
+        }
+    }
+
+    cout << "Produto nao encontrado." << endl;
+}
+
+void ListaCompras::imprimeLista() const {
+    if (listaVazia()) {
+        cout << "Lista vazia, nao ha produtos para imprimir." << endl;
+        return;
+    }
+
+    item* atual = primeiro;
+    while (atual != nullptr) {
+        cout << "Produto: " << atual->nome << endl;
+        cout << "Codigo: " << atual->codProduto << endl;
+        cout << "Quantidade: " << atual->quantidade << endl;
+        cout << "Valor: " << atual->valor << endl << endl;
+        atual = atual->proximo;
+    }
+}
+
+double ListaCompras::calculaTotal() const {
+    if (listaVazia()) {
+        cout << "Lista vazia, nao ha produtos para calcular." << endl;
+        return 0.0;
+    }
+
+    double total = 0.0;
+    for (item* atual = primeiro; atual != nullptr; atual = atual->proximo) {
+        total += atual->valor * atual->quantidade;
+    }
+
+    cout << "Valor total da lista: R$ " << total << endl;
+    return total;
+}
