@@ -24,16 +24,8 @@ bool ListaCompras::listaCheia(){
     return ultimo == 100;
 }
 
-//cadastra um novo produto no final da lista (só se ela não estiver cheia e o codigo não for repetido)
+//cadastra um novo produto no final da lista (só se ela não estiver cheia e o codigo não for repetido, que é verificado na main na hora de por os dados)
 void ListaCompras::cadastraProduto(item novoItem){
-        if (listaCheia()){
-            cout << "Lista cheia, remova algum produto antes de cadastrar outro." << endl;
-            return;
-        }
-        if (confereRepetido(novoItem.codProduto)){
-            cout << "Ja existe um produto com esse codigo" << endl; 
-            return;
-        }
         produtos[ultimo] = novoItem;
         ultimo++;
 
@@ -50,7 +42,7 @@ void ListaCompras::removeItem(int i){
         for (i; i < ultimo - 1; i++){
             produtos[i] = produtos[i+1];
         }
-        i--;
+        ultimo--;
         cout << "Elemento removido da posicao " << i << endl;
     }
 
