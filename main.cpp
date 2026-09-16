@@ -5,6 +5,7 @@ int main(){
     ListaCompras listaCompras;
     int resposta = 200;
 
+    //ui basica dando pro usuario as opções que o programa tem
     do {
         cout << "1 - Adicionar item na lista" << endl;
         cout << "2 - Remover item da lista" << endl;
@@ -16,6 +17,8 @@ int main(){
         cin >> resposta;
 
         switch(resposta){
+            //case para inserir itens se a lista não estiver cheia
+            //o código não pode ser repetido
             case 1:{
                 if (listaCompras.listaCheia()){
                     cout << "Lista cheia, remova algum produto antes de cadastrar outro." << endl;
@@ -39,6 +42,7 @@ int main(){
                 listaCompras.cadastraProduto(novoItem);
                 break;
             }
+            //case pra englobar as duas formas de remover itens da lista(fim ou qualquer posicao)
             case 2:{ 
                 char alternativa = 'z';
                 do{
@@ -59,6 +63,7 @@ int main(){
                 }
                 break;
             }
+            //case englobando os dois tipos de consulta (todos os elementos ou pelo codigo)
             case 3:{ 
                 char alternativa = 'z';
                 do{
@@ -79,15 +84,18 @@ int main(){
                 }
                 break;
             }
-                    
+            
+            //case pra exibir o valor total da lista
             case 4:{
                 listaCompras.calculaTotal();
                 break;
             }
+            //case pra finalizar
             case 0:{
                 cout << "Programa finalizado." << endl;
                 break;  
             }
+            //case caso a opção dada pelo usuario não seja reconhecida
             default:{
                 cout << "Opcao nao reconhecida. " << endl;
                 break;

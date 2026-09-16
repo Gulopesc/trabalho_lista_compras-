@@ -46,6 +46,7 @@ void ListaCompras::removeItem(int i){
         cout << "Elemento removido da posicao " << i << endl;
     }
 
+//remove o ultimo item da lista usando a função padrão de remover
 void ListaCompras::removeUltimo(){
         if (listaVazia()){
             cout << "Lista vazia, nao ha produtos para remover." << endl;
