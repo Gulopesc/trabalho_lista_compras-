@@ -34,4 +34,10 @@ public:
     double calculaTotal() const;
 };
 
+    void cadastraProduto(item novoItem);
+    void removePorCodigo (string codigo);
+    void imprimePorCodigo (string codigo);
+    void imprimeLista();
+    void removeUltimo();
+};
 #endif
