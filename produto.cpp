@@ -24,16 +24,8 @@ bool ListaCompras::listaCheia(){
     return ultimo == 100;
 }
 
-//cadastra um novo produto no final da lista (só se ela não estiver cheia e o codigo não for repetido)
+//cadastra um novo produto no final da lista (só se ela não estiver cheia e o codigo não for repetido, que é verificado na main na hora de por os dados)
 void ListaCompras::cadastraProduto(item novoItem){
-        if (listaCheia()){
-            cout << "Lista cheia, remova algum produto antes de cadastrar outro." << endl;
-            return;
-        }
-        if (confereRepetido(novoItem.codProduto)){
-            cout << "Ja existe um produto com esse codigo" << endl; 
-            return;
-        }
         produtos[ultimo] = novoItem;
         ultimo++;
 
@@ -47,11 +39,22 @@ void ListaCompras::removeItem(int i){
             cout << "Lista vazia, nao ha produtos para remover." << endl;
             return;
         }
-        for (i; i < ultimo - 1; i++){
+        for (; i < ultimo - 1; i++){
             produtos[i] = produtos[i+1];
         }
-        i--;
+        ultimo--;
         cout << "Elemento removido da posicao " << i << endl;
+    }
+
+//remove o ultimo item da lista usando a função padrão de remover
+void ListaCompras::removeUltimo(){
+        if (listaVazia()){
+            cout << "Lista vazia, nao ha produtos para remover." << endl;
+            return;
+        }
+
+        ultimo--;
+        cout << "Ultimo elemento removido." << endl;
     }
 
 //remove um item de acordo com o codigo dele, se não achar com o codigo não faz nada
@@ -96,8 +99,8 @@ void ListaCompras::imprimeLista(){
             return;
         }
         for(int i = 0; i < ultimo; i++){
-            cout << i+1 << " produto da lista: " << endl;
-            cout << "Produto: " << produtos[i].nome << endl;
+            cout << "Produto " << i+1 << "da lista: " << endl;
+            cout << "Nome: " << produtos[i].nome << endl;
             cout << "Codigo: " << produtos[i].codProduto << endl;
             cout << "Quantidade: " << produtos[i].quantidade << endl;
             cout << "Valor: " << produtos[i].valor << endl << endl;
